@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<style type="text/css">
+		.player{
+			width: 150px;
+			height: 150px;
+			position: absolute;
+			left: 900px;
+			top: 500px;
+			transition: 1s;
+		}
+		.main{
+			background-image: url(bg.png);
+		}
+		.loc1{
+			position: absolute;
+			top: 600px;
+			left: 200px;
+			width: 100px;
+			height: 190px;
+			background-image: url(door.png);
+			background-size: 100% 100%;
+		}
+		.loc2{
+			position: absolute;
+			top: 250px;
+			left: 600px;
+			width: 100px;
+			height: 190px;
+			background-image: url(door.png);
+			background-size: 100% 100%;
+		}
+		.loc3{
+			position: absolute;
+			top: 100px;
+			left: 1200px;
+			width: 100px;
+			height: 190px;
+			background-image: url(door.png);
+			background-size: 100% 100%;
+		}
+		.exit{ 
+			width: 150px;
+			height: 200px;
+			display: block;
+			position: absolute;
+			left: 1500px;
+			top: 600px;
+			background-image: url(exit.png);
+			background-size: 100% 100%;
+		}
+		.ball{
+			position: absolute;
+			top: 500px;
+			left: 800px;
+			width: 70px;
+			height: 70px;
+			background-image: url(ball.png);
+			background-size: 100% 100%;
+		}
+		.location1{
+			display: none;
+		}
+		.location2{
+			display: none;
+		}
+		.location3{
+			display: none;
+		}
+		.question{
+			position: absolute;
+			left: 30%;
+			top: 20%;
+			display: none;
+		}
+		.answer1{
+			width: 100px;
+			height: 80px;
+			position: absolute;
+			left: 30%;
+			top: 40%;
+			display: none;
+			font-size: 30px;
+		}
+		.answer2{
+			width: 100px;
+			height: 80px;
+			position: absolute;
+			left: 50%;
+			top: 40%;
+			display: none;
+			font-size: 30px;
+		}
+		.word {
+			position: absolute;
+			left: 40%;
+			top: 40%;
+			display: none;
+		}
+		.trans{
+			position: absolute;
+			left: 50%;
+			top: 40%;
+			display: none;
+		}
+		.test{ 
+			position: absolute;
+			left: 50%;
+			top: 25%;
+			display: none;
+		}
+		.next {
+			position: absolute;
+			left: 60%;
+			top: 50%;
+		}
+		.check{
+			display: none;
+			position: absolute;
+			left: 50%;
+			top: 60%;
+		}
+		.mark1{
+			width: 100px;
+			height: 150px;
+			display: block;
+		}
+		.mark2{
+			width: 100px;
+			height: 150px;
+			display: block;
+		}
+		.mark3{
+			width: 100px;
+			height: 150px;
+			display: block;
+		}
+		.board{
+			position: absolute;
+			left: 500px;
+			height: 400px;
+			width: 600px;
+			background-image: url(board.jpg);
+			background-size: 100% 100%;
+		}
+		.board2{
+			position: absolute;
+			left: 500px;
+			height: 500px;
+			width: 700px;
+			background-image: url(board.jpg);
+			background-size: 100% 100%;
+		}
+	</style>
+</head>
+<body class="main">
+	<div class="row">
+		<div class="mark1 border border-dark ml-4">
+		</div>
+		<div class="mark2 border border-dark ml-4">
+		</div>
+		<div class="mark3 border border-dark ml-4">
+		</div>
+	</div>
+	<h3 style="position: absolute; left: 1500px; top: 550px;" class="txt">Выход</h3>
+	<div class="exit">
+	</div>
+	<h3 style="position: absolute; left: 200px; top: 550px;" class="txt">Физкультура</h3>
+	<div class="loc1">
+	</div>
+	<h3 style="position: absolute; left: 600px; top: 200px;" class="txt">История</h3>
+	<div class="loc2">
+	</div>
+	<h3 style="position: absolute; left: 1200px; top: 60px;" class="txt">Английский</h3>
+	<div class="loc3">
+	</div>
+	<div class="location1">
+		<h1 class="time1_txt"></h1>
+		<h1 class="score1_txt"></h1>
+		<div class="ball">
+		</div>
+	</div>
+	<div class="location2">
+		<h1 class="time2_txt">25</h1>
+		<div class="board">
+			<h4 class="question"></h4>
+			<div class="answer1">
+			</div>
+			<div class="answer2">
+			</div>
+		</div>
+	</div>
+	<div class="location3">
+		<h1 class="time3_txt"></h1>
+		<div class="board2">
+			<h1 class="test"></h1>
+			<textarea class="form-control trans col-2" value=''></textarea>
+			<button class="check">Проверить</button>
+		</div>
+	</div>
+	<div class="player" style="background-image: url(player.png); background-size: 100% 100%;">
+	</div>
+	<script type="text/javascript">
+		let txt = document.querySelectorAll('.txt');
+		let questions = ['В каком году Колумб открыл Америку', 'Когда было первое Крещение Руси', 'Когда началась первая мировая война'];
+		let answers = ['1492г', '988г', '1914г'];
+		let answers2 = ['1462г', '982г', '1908г'];
+		let words = ['ball', 'carrot', 'bottle'];
+		let translates = ['мяч', 'морковка', 'бутылка'];
+		let answer1 = document.querySelector('.answer1');
+		let board = document.querySelector('.board');
+		let board2 = document.querySelector('.board2');
+		let answer2 = document.querySelector('.answer2');
+		let check = document.querySelector('.check');
+		let index2 = 0;
+		let time1 = 15;
+		let time2 = 25;
+		let time3 = 30;
+		let score1 = 0;
+		let score1_txt = document.querySelector('.score1_txt');
+		let time1_txt = document.querySelector('.time1_txt');
+		let time2_txt = document.querySelector('.time2_txt');
+		let time3_txt = document.querySelector('.time3_txt');
+		let loc1 = document.querySelector('.loc1');
+		let loc2 = document.querySelector('.loc2');
+		let loc3 = document.querySelector('.loc3');
+		let location1 = document.querySelector('.location1');
+		let location2 = document.querySelector('.location2');
+		let location3 = document.querySelector('.location3');
+		let player = document.querySelector('.player');
+		let main = document.querySelector('.main');
+		let exit = document.querySelector('.exit');
+		let ball = document.querySelector('.ball');
+		let quest = document.querySelector('.question')
+		let index = 0;
+		let marks = 0;
+		let test = document.querySelector('.test');
+		let trans = document.querySelector('.trans');
+		let mark1 = document.querySelector('.mark1');
+		let mark2 = document.querySelector('.mark2');
+		let mark3 = document.querySelector('.mark3');
+		loc1.onclick = function(){
+			player.style.left = '230px';
+			player.style.top = '630px';
+			let changeLoc1 = function(){
+				for(let i = 0; i < 4; i++){
+					txt[i].style.display = 'none';
+				}
+				exit.style.display = 'none';
+				mark1.style.display = 'none';
+				mark2.style.display = 'none';
+				mark3.style.display = 'none';
+				main.style.backgroundImage = 'url(loc1.jpg)';
+				main.style.backgroundSize = '100%';
+				loc1.style.display = 'none';
+				loc2.style.display = 'none';
+				loc3.style.display = 'none';
+				player.style.transition = '0s';
+				player.style.left = '550px';
+				player.style.top = '500px';
+				location1.style.display = 'block';
+				score1_txt.innerHTML= score1;
+				time1_txt.innerHTML= time1;
+				let showMessage1 = function(){
+					alert('Успей кликнуть на мяч 30 раз за 15 секунд чтобы получить хорошую оценку');
+					let timer = function(){
+							time1 = time1 - 1;
+							time1_txt.innerHTML = time1;
+							if(time1 == 0){
+								alert("Время вышло");
+								clearInterval(timeID);
+							}
+						}
+					ball.onclick = function(){
+						score1 = score1 + 1;
+						score1_txt.innerHTML= score1;
+						if(score1 == 30){
+							alert('Молодец! Ты сдал зачет')
+							clearInterval(timeID);
+							for(let i = 0; i < 4; i++){
+								txt[i].style.display = 'block';
+							}
+							marks = marks + 1;
+							mark1.style.backgroundImage = 'url(five.png)';
+							mark1.style.backgroundSize = '100% 100%';
+							mark1.style.display = 'block';
+							mark2.style.display = 'block';
+							mark3.style.display = 'block';
+							exit.style.display = 'block';
+							main.style.backgroundImage = 'url(bg.png)';
+							main.style.backgroundSize = '';
+							loc1.style.display = 'block';
+							loc2.style.display = 'block';
+							loc3.style.display = 'block';
+							score1_txt.style.display = 'none';
+							ball.style.display = 'none';
+							time1_txt.style.display = 'none';
+							player.style.transition = '1s';
+						}
+					}
+					let timeID = setInterval(timer, 1000);
+			}
+			setTimeout(showMessage1, 4000)
+		}
+		setTimeout(changeLoc1, 2000);
+	}
+		loc2.onclick = function(){
+			player.style.left = '630px';
+			player.style.top = '280px';
+			let changeLoc2 = function(){
+				for(let i = 0; i < 4; i++){
+					txt[i].style.display = 'none';
+				}
+				exit.style.display = 'none';
+				mark1.style.display = 'none';
+				mark2.style.display = 'none';
+				mark3.style.display = 'none';
+				main.style.background = 'white';
+				loc1.style.display = 'none';
+				loc2.style.display = 'none';
+				loc3.style.display = 'none';
+				player.style.transition = '0s';
+				player.style.left = '800px';
+				player.style.top = '500px';
+				location2.style.display = 'block';
+				let showMessage2 = function(){
+					alert('Выбери верный вариант. На весь тест у тебя есть 25 секунд');
+					quest.style.display = 'block';
+					answer1.style.display = 'block';
+					answer2.style.display = 'block';
+					board.style.display = 'block';
+					quest.innerHTML = questions[index];
+					answer1.innerHTML = answers[index]
+					answer2.innerHTML = answers2[index]
+					let timer = function(){
+							time2 = time2 - 1;
+							time2_txt.innerHTML = time2;
+							if(time2 == 0){
+								alert("Время вышло");
+								clearInterval(timeID);
+							}
+						}
+					let timeID = setInterval(timer, 1000);
+					answer1.onclick = function(){
+						index = index + 1;
+						quest.innerHTML = questions[index]
+						answer1.innerHTML = answers[index]
+						answer2.innerHTML = answers2[index]
+						alert('Это правильно');
+						if(index >=3){
+							marks = marks + 1;
+							clearInterval(timeID);
+							for(let i = 0; i < 4; i++){
+								txt[i].style.display = 'block';
+							}
+							alert('Молодец! Ты сдал тест');
+							board.style.display = 'none';
+							mark2.style.backgroundImage = 'url(five.png)';
+							mark2.style.backgroundSize = '100% 100%';
+							mark1.style.display = 'block';
+							mark2.style.display = 'block';
+							mark3.style.display = 'block';
+							main.style.backgroundImage = 'url(bg.png)';
+							loc1.style.display = 'block';
+							loc2.style.display = 'block';
+							loc3.style.display = 'block';
+							quest.style.display = 'none';
+							exit.style.display = 'block';
+							answer1.style.display = 'none';
+							answer2.style.display = 'none';
+							time2_txt.style.display = 'none';
+							player.style.transition = '1s';
+						}
+					}
+					answer2.onclick = function(){
+						alert('Это не правильно');
+						clearInterval(timeID);
+					}
+				}
+				setTimeout(showMessage2, 2000);
+		}
+		setTimeout(changeLoc2, 2000);
+	}
+		loc3.onclick = function(){
+			player.style.left = '1230px';
+			player.style.top = '130px';
+			let changeLoc3 = function(){
+				for(let i = 0; i < 4; i++){
+					txt[i].style.display = 'none';
+				}
+				mark1.style.display = 'none';
+				mark2.style.display = 'none';
+				mark3.style.display = 'none';
+				exit.style.display = 'none';
+				main.style.background = 'white';
+				loc1.style.display = 'none';
+				loc2.style.display = 'none';
+				loc3.style.display = 'none';
+				player.style.transition = '0s';
+				player.style.left = '800px';
+				player.style.top = '500px';
+				location3.style.display = 'block';
+				let showMessage3 = function(){
+					alert('Ты должен успеть перевести все слова за 30 секунд');
+					test.style.display = 'block';
+					check.style.display = 'block';
+					test.innerHTML = words[index2]
+					trans.style.display = 'block';
+					let timer = function(){
+							time3 = time3 - 1;
+							time3_txt.innerHTML = time3;
+							if(time3 == 0){
+								alert("Время вышло");
+								clearInterval(timeID);
+							}
+						}
+					let timeID = setInterval(timer, 1000);
+					check.onclick = function(){
+						if(trans.value == translates[index2]){
+							alert('Правильно')
+							index2 = index2 + 1;
+							test.innerHTML = words[index2];
+							if(index2 == 3){
+								marks = marks + 1;
+								clearInterval(timeID);
+								alert('Молодец! Ты сдал тест');
+								for(let i = 0; i < 4; i++){
+									txt[i].style.display = 'block';
+								}
+								board2.style.display = 'none';
+								exit.style.display = 'block';
+								mark3.style.backgroundImage = 'url(five.png)';
+								mark3.style.backgroundSize = '100% 100%';
+								mark1.style.display = 'block';
+								mark2.style.display = 'block';
+								mark3.style.display = 'block';
+								main.style.backgroundImage = 'url(bg.png)';
+								loc1.style.display = 'block';
+								loc2.style.display = 'block';
+								loc3.style.display = 'block';
+								check.style.display = 'none';
+								trans.style.display = 'none';
+								test.style.display = 'none';
+								time3_txt.style.display = 'none';
+								player.style.transition = '1s';
+							}
+						} else {
+							alert('Не правильно')
+							clearInterval(timeID);
+						}
+
+					}
+				}
+				setTimeout(showMessage3, 2000);
+			}
+			setTimeout(changeLoc3, 2000);
+
+		}
+		if(marks == 3){
+			exit.style.backgroundImage = 'url(exit1.png)'
+		}
+		exit.onclick = function(){
+			player.style.left = '1500px';
+			player.style.top = '600px';
+			let checkMarks = function(){
+				if(marks == 3){
+				alert('Молодец! Ты закончил школу');
+				for(let i = 0; i < 4; i++){
+					txt[i].style.display = 'none';
+				}
+				main.style.background = 'white';
+				main.style.dispaly = 'none';
+				player.style.display = 'none';
+				exit.style.display = 'none';
+				loc1.style.display = 'none';
+				loc2.style.display = 'none';
+				loc3.style.display = 'none';
+				loc1.style.display = 'none';
+				mark1.style.display = 'none';
+				mark2.style.display = 'none';
+				mark3.style.display = 'none';
+				} else {
+					alert('Ты еще не сдал все экзамены');
+				}
+			}
+			setTimeout(checkMarks, 2000);
+		}
+	</script>
+</body>
+</html>
